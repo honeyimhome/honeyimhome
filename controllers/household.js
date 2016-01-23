@@ -8,21 +8,27 @@ var async = require('async');
  * Return list of households.
  */
 exports.getHouseholds = function(req, res) {
-  if (req.user) {
-    return res.redirect('/');
-  }
-  res.render('account/login', {
-    title: 'Login'
-  });
+    console.log("we bout to return households here");
+    Household.find(function(err, docs) {
+        res.json(docs);
+        // res.render('books', { books: docs });
+    });
+  // if (req.user) {
+  //   return res.redirect('/');
+  // }
+  // res.render('account/login', {
+  //   title: 'Login'
+  // });
 };
 
 /**
  * POST /household
  * Create a household
  */
-exports.creatHousehold = function(req, res) {
-  console.log(req.body);
-
+exports.createHousehold = function(req, res) {
+    console.log("In createHousehold method");
+    console.log(req.body.data);
+    res.send("hi");
 };
 
 
@@ -32,8 +38,9 @@ exports.getNewHouse = function(req, res) {
   // }
   console.log("TESTING");
   Household.find(function(err, docs){
-    res.render('householdform', {households: docs},{
-      title: 'New Household'
-    });
+    console.log("TESTING2");
+    res.render('householdform', {households: docs});
+    console.log("testing3");
   })
+  console.log("testing3");
 };
