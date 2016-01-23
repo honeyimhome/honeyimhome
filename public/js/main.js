@@ -25,7 +25,7 @@ $(document).ready(function() {
       method: "POST",
       url: "http://localhost:3000/household",
       data: {
-        name: "John"
+        name: "household2"
       }
     })
       .done(function(msg) {

@@ -43,7 +43,7 @@ exports.createHousehold = function(req, res) {
         message: "couldnt save household"
       });
     }
-    res.send("succesfully saved???");
+    res.send("succesfully saved a household");
   });
 
 };
