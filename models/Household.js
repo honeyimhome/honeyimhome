@@ -5,6 +5,8 @@ var User = require('./User');
 
 var householdSchema = new mongoose.Schema({
   name: String,
+  albumName: String,
+  albumKey: String,
   members: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

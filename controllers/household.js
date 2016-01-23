@@ -8,11 +8,11 @@ var async = require('async');
  * Return list of households.
  */
 exports.getHouseholds = function(req, res) {
-    console.log("we bout to return households here");
-    Household.find(function(err, docs) {
-        res.json(docs);
-        // res.render('books', { books: docs });
-    });
+  console.log("we bout to return households here");
+  Household.find(function(err, docs) {
+    res.json(docs);
+    // res.render('books', { books: docs });
+  });
   // if (req.user) {
   //   return res.redirect('/');
   // }
@@ -26,9 +26,26 @@ exports.getHouseholds = function(req, res) {
  * Create a household
  */
 exports.createHousehold = function(req, res) {
-    console.log("In createHousehold method");
-    console.log(req.body.data);
-    res.send("hi");
+  console.log("In createHousehold method");
+  // console.log(req.body);
+  var name = req.body.name;
+  var user = req.user;
+  var household = new Household({
+    name: name,
+    members: [user._id]
+  });
+  console.log("The household is: ");
+  console.log(household);
+
+  household.save(function(err) {
+    if (err) {
+      return res.status(400).send({
+        message: "couldnt save household"
+      });
+    }
+    res.send("succesfully saved a household");
+  });
+
 };
 
 

@@ -95,7 +95,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(lusca({
-  csrf: true,
+  csrf: false,
   xframe: 'SAMEORIGIN',
   xssProtection: true
 }));
@@ -142,8 +142,11 @@ app.get('/account/unlink/:provider', passportConf.isAuthenticated, userControlle
 // Return list of households
 app.get('/households', householdController.getHouseholds);
 // Single household enpoints
-app.post('/household', householdController.createHousehold);
-
+app.route('/household')
+  .get(householdController.getHousehold)
+  .post(householdController.createHousehold)
+  .put(householdController.addToHousehold);
+//.delete(householdController.deleteBooks)
 
 
 /***
