@@ -24,3 +24,14 @@ exports.creatHousehold = function(req, res) {
   console.log(req.body);
 
 };
+
+
+exports.getNewHouse = function(req, res) {
+  // if (!req.user) {
+  //   return res.redirect('/login');
+  // }
+  console.log("TESTING");
+  res.render('householdform', {
+    title: 'New Household'
+  });
+};

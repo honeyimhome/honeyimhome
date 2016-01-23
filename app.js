@@ -141,6 +141,11 @@ app.get('/account/unlink/:provider', passportConf.isAuthenticated, userControlle
 ***/
 app.get('/households', householdController.getHouseholds);
 
+/***
+*OUR APP VIEWS
+***/
+app.get('/newhousehold', householdController.getNewHouse);
+
 /**
  * API examples routes.
  */
