@@ -1,0 +1,54 @@
+nav
+  div.nav-wrapper
+    a.brand-logo.right(href='#') Honey Im Home
+
+  //- ul.right.hide-on-med-and-down
+  //-   li
+  //-     a(href='#!') First Sidebar Link
+  //-   li
+  //-     a(href='#!') Second Sidebar Link
+  ul#slide-out.side-nav.fixed
+    //- li
+    //-   a(href='#!') Profile Settings
+    li
+      a(href='#!') Feed
+    li
+      if !user
+        li(class=title=='Login'?'active':undefined)
+          a(href='/login') Login
+        li(class=title=='Create Account'?'active':undefined)
+          a(href='/signup') Create Account
+      else
+        li
+          a(href='#!')
+            .row
+              .left
+                if user.profile.picture
+                  img.circle.responsive-img(src='#{user.profile.picture}')
+                else
+                  img.circle.responsive-img(src='#{user.gravatar(60)}')
+              .right
+                span.black-text.valign
+                  | Profile Settings
+          //- .col.s10
+          //-   span.black-text
+          //-     | #{user.profile.name || user.email || user.id}&nbsp;
+
+
+      //- li.dropdown(class=title=='Account Management'?'active':undefined)
+      //-   a.dropdown-toggle(href='#', data-toggle='dropdown')
+      //-     if user.profile.picture
+      //-       img(src='#{user.profile.picture}')
+      //-     else
+      //-       img(src='#{user.gravatar(60)}')
+      //-     | #{user.profile.name || user.email || user.id}&nbsp;
+      //-     i.caret
+      //-   ul.dropdown-menu
+      //-     li
+      //-       a(href='/account') My Account
+      //-     li.divider
+      //-     li
+      //-       a(href='/logout') Logout
+a.button-collapse(href='#', data-activates='slide-out')
+    i.mdi-navigation-menu
+    | FUK
