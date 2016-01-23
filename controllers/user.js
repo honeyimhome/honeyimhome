@@ -5,6 +5,22 @@ var nodemailer = require('nodemailer');
 var passport = require('passport');
 var User = require('../models/User');
 
+
+
+
+/**
+ * GET /userlist
+ * Return a list of users
+ */
+exports.getUserList('/usersList', function(req, res) {
+    User.find({}, function(err, users) {
+        res.send(users.reduce(function(userMap, item) {
+            userMap[item.id] = item;
+            return userMap;
+        }, {}));
+    });
+});
+
 /**
  * GET /login
  * Login page.
