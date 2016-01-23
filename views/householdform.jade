@@ -16,8 +16,8 @@ block content
 				for house in households
 					li.collection-item.avatar
 						span.title= house.name
-						input#test1(name='group1', type='radio')
-						label(for='test1') Red
+						input(name='group1', type='radio',id=house._id)
+						label(for=house._id) Red
 
 			h5 Upload 5 or more "selfies":
 			.form-group(action='#')
