@@ -143,7 +143,7 @@ app.get('/account/unlink/:provider', passportConf.isAuthenticated, userControlle
 app.get('/households', householdController.getHouseholds);
 // Single household enpoints
 app.route('/household')
-  .get(householdController.getHousehold)
+  // .get(householdController.getHousehold)
   .post(householdController.createHousehold)
   .put(householdController.addToHousehold);
 //.delete(householdController.deleteBooks)
