@@ -31,7 +31,9 @@ exports.getNewHouse = function(req, res) {
   //   return res.redirect('/login');
   // }
   console.log("TESTING");
-  res.render('householdform', {
-    title: 'New Household'
-  });
+  Household.find(function(err, docs){
+    res.render('householdform', {households: docs},{
+      title: 'New Household'
+    });
+  })
 };
