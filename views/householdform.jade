@@ -9,7 +9,7 @@ block content
 			input#first_name2.validate(value='Enter Here', type='text')
 			label.active(for='first_name2') Household
 
-		form(action='/household', method='POST')
+		form(action='/household', method='PUT')
 			input(type='hidden', name='_csrf', value=_csrf)
 			h3 Join:
 			ul.collection

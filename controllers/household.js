@@ -27,7 +27,7 @@ exports.getHouseholds = function(req, res) {
  */
 exports.createHousehold = function(req, res) {
   console.log("In createHousehold method");
-  console.log(req.body.data);
+  console.log(req.body);
   res.send("hi");
 };
 
@@ -68,6 +68,6 @@ exports.getNewHouse = function(req, res) {
       households: docs
     });
     console.log("testing3");
-  })
+  });
   console.log("testing3");
 };
