@@ -12,14 +12,15 @@ var User = require('../models/User');
  * GET /userlist
  * Return a list of users
  */
-exports.getUserList = function(req, res) {
-  User.find({}, function(err, users) {
-    res.send(users.reduce(function(userMap, item) {
-      userMap[item.id] = item;
-      return userMap;
-    }, {}));
-  });
-};
+// exports.getUserList = function(req, res) {
+//     console.log("we in here");
+//     User.find({}, function(err, users) {
+//         res.send(users.reduce(function(userMap, item) {
+//             userMap[item.id] = item;
+//             return userMap;
+//         }, {}));
+//     });
+// };
 
 /**
  * GET /login

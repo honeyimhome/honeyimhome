@@ -118,7 +118,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
  * Primary app routes.
  */
 app.get('/', homeController.index);
-app.get('/userlist', userController.getUserList);
+// app.get('/userlist', userController.getUserList);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);
@@ -137,9 +137,14 @@ app.post('/account/delete', passportConf.isAuthenticated, userController.postDel
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
 
 /***
-* App API POINTS
+* App - Household API POINTS
 ***/
+// Return list of households
 app.get('/households', householdController.getHouseholds);
+// Single household enpoints
+app.post('/household', householdController.createHousehold);
+
+
 
 /**
  * API examples routes.
