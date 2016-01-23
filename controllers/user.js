@@ -12,14 +12,14 @@ var User = require('../models/User');
  * GET /userlist
  * Return a list of users
  */
-exports.getUserList('/usersList', function(req, res) {
-    User.find({}, function(err, users) {
-        res.send(users.reduce(function(userMap, item) {
-            userMap[item.id] = item;
-            return userMap;
-        }, {}));
-    });
-});
+exports.getUserList = function(req, res) {
+  User.find({}, function(err, users) {
+    res.send(users.reduce(function(userMap, item) {
+      userMap[item.id] = item;
+      return userMap;
+    }, {}));
+  });
+};
 
 /**
  * GET /login
@@ -54,14 +54,18 @@ exports.postLogin = function(req, res, next) {
       return next(err);
     }
     if (!user) {
-      req.flash('errors', { msg: info.message });
+      req.flash('errors', {
+        msg: info.message
+      });
       return res.redirect('/login');
     }
     req.logIn(user, function(err) {
       if (err) {
         return next(err);
       }
-      req.flash('success', { msg: 'Success! You are logged in.' });
+      req.flash('success', {
+        msg: 'Success! You are logged in.'
+      });
       res.redirect(req.session.returnTo || '/');
     });
   })(req, res, next);
@@ -110,9 +114,13 @@ exports.postSignup = function(req, res, next) {
     password: req.body.password
   });
 
-  User.findOne({ email: req.body.email }, function(err, existingUser) {
+  User.findOne({
+    email: req.body.email
+  }, function(err, existingUser) {
     if (existingUser) {
-      req.flash('errors', { msg: 'Account with that email address already exists.' });
+      req.flash('errors', {
+        msg: 'Account with that email address already exists.'
+      });
       return res.redirect('/signup');
     }
     user.save(function(err) {
@@ -157,7 +165,9 @@ exports.postUpdateProfile = function(req, res, next) {
       if (err) {
         return next(err);
       }
-      req.flash('success', { msg: 'Profile information updated.' });
+      req.flash('success', {
+        msg: 'Profile information updated.'
+      });
       res.redirect('/account');
     });
   });
@@ -187,7 +197,9 @@ exports.postUpdatePassword = function(req, res, next) {
       if (err) {
         return next(err);
       }
-      req.flash('success', { msg: 'Password has been changed.' });
+      req.flash('success', {
+        msg: 'Password has been changed.'
+      });
       res.redirect('/account');
     });
   });
@@ -198,12 +210,16 @@ exports.postUpdatePassword = function(req, res, next) {
  * Delete user account.
  */
 exports.postDeleteAccount = function(req, res, next) {
-  User.remove({ _id: req.user.id }, function(err) {
+  User.remove({
+    _id: req.user.id
+  }, function(err) {
     if (err) {
       return next(err);
     }
     req.logout();
-    req.flash('info', { msg: 'Your account has been deleted.' });
+    req.flash('info', {
+      msg: 'Your account has been deleted.'
+    });
     res.redirect('/');
   });
 };
@@ -219,10 +235,14 @@ exports.getOauthUnlink = function(req, res, next) {
       return next(err);
     }
     user[provider] = undefined;
-    user.tokens = _.reject(user.tokens, function(token) { return token.kind === provider; });
+    user.tokens = _.reject(user.tokens, function(token) {
+      return token.kind === provider;
+    });
     user.save(function(err) {
       if (err) return next(err);
-      req.flash('info', { msg: provider + ' account has been unlinked.' });
+      req.flash('info', {
+        msg: provider + ' account has been unlinked.'
+      });
       res.redirect('/account');
     });
   });
@@ -237,14 +257,18 @@ exports.getReset = function(req, res) {
     return res.redirect('/');
   }
   User
-    .findOne({ resetPasswordToken: req.params.token })
+    .findOne({
+      resetPasswordToken: req.params.token
+    })
     .where('resetPasswordExpires').gt(Date.now())
     .exec(function(err, user) {
       if (err) {
         return next(err);
       }
       if (!user) {
-        req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
+        req.flash('errors', {
+          msg: 'Password reset token is invalid or has expired.'
+        });
         return res.redirect('/forgot');
       }
       res.render('account/reset', {
@@ -271,14 +295,18 @@ exports.postReset = function(req, res, next) {
   async.waterfall([
     function(done) {
       User
-        .findOne({ resetPasswordToken: req.params.token })
+        .findOne({
+          resetPasswordToken: req.params.token
+        })
         .where('resetPasswordExpires').gt(Date.now())
         .exec(function(err, user) {
           if (err) {
             return next(err);
           }
           if (!user) {
-            req.flash('errors', { msg: 'Password reset token is invalid or has expired.' });
+            req.flash('errors', {
+              msg: 'Password reset token is invalid or has expired.'
+            });
             return res.redirect('back');
           }
           user.password = req.body.password;
@@ -310,7 +338,9 @@ exports.postReset = function(req, res, next) {
           'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
       };
       transporter.sendMail(mailOptions, function(err) {
-        req.flash('success', { msg: 'Success! Your password has been changed.' });
+        req.flash('success', {
+          msg: 'Success! Your password has been changed.'
+        });
         done(err);
       });
     }
@@ -357,9 +387,13 @@ exports.postForgot = function(req, res, next) {
       });
     },
     function(token, done) {
-      User.findOne({ email: req.body.email.toLowerCase() }, function(err, user) {
+      User.findOne({
+        email: req.body.email.toLowerCase()
+      }, function(err, user) {
         if (!user) {
-          req.flash('errors', { msg: 'No account with that email address exists.' });
+          req.flash('errors', {
+            msg: 'No account with that email address exists.'
+          });
           return res.redirect('/forgot');
         }
         user.resetPasswordToken = token;
@@ -387,7 +421,9 @@ exports.postForgot = function(req, res, next) {
           'If you did not request this, please ignore this email and your password will remain unchanged.\n'
       };
       transporter.sendMail(mailOptions, function(err) {
-        req.flash('info', { msg: 'An e-mail has been sent to ' + user.email + ' with further instructions.' });
+        req.flash('info', {
+          msg: 'An e-mail has been sent to ' + user.email + ' with further instructions.'
+        });
         done(err, 'done');
       });
     }
