@@ -95,7 +95,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(lusca({
-  csrf: true,
+  csrf: false,
   xframe: 'SAMEORIGIN',
   xssProtection: true
 }));
@@ -148,6 +148,11 @@ app.route('/household')
   .put(householdController.addToHousehold);
 //.delete(householdController.deleteBooks)
 
+
+/***
+*OUR APP VIEWS
+***/
+app.get('/newhousehold', householdController.getNewHouse);
 
 /**
  * API examples routes.
