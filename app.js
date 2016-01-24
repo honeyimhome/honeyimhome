@@ -20,6 +20,11 @@ var passport = require('passport');
 var expressValidator = require('express-validator');
 var sass = require('node-sass-middleware');
 var _ = require('lodash');
+// Photo uploads
+var multer = require('multer');
+var upload = multer({
+  dest: 'uploads/'
+});
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -146,7 +151,7 @@ app.post('/household/new', householdController.createHousehold);
 // Set of routes for single household
 app.route('/household')
   .get(householdController.getHousehold)
-  .post(householdController.addToHousehold)
+  .post(upload.array('selfies', 4), householdController.addToHousehold);
 //.delete(householdController.deleteBooks)
 
 

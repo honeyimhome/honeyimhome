@@ -3,6 +3,7 @@ var Household = require('../models/Household');
 var _ = require('lodash');
 var async = require('async');
 
+
 /**
  * GET /households
  * Return list of households.
@@ -37,6 +38,9 @@ exports.addToHousehold = function(req, res) {
   var householdId = req.body.household;
   console.log("the household is: ");
   console.log(householdId);
+  var files = req.files;
+  console.log("The files: ");
+  console.log(files);
   Household.findOne({
     _id: householdId
   }, function(err, house) {
