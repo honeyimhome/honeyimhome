@@ -45,7 +45,6 @@ var apiController = require('./controllers/api');
 var clientController = require('./controllers/client');
 var contactController = require('./controllers/contact');
 var householdController = require('./controllers/household');
-var lambdaClient = require('./image_processing/lambdaClient');
 var smsController = require('./controllers/text');
 
 
