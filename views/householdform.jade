@@ -6,17 +6,17 @@ block content
 		h3 Create:
 		//Enter a household
 		.input-field.col.s6
-			input#first_name2.validate(value='Enter Here', type='text')
+			input#first_name2.validate( type='text')
 			label.active(for='first_name2') Household
 
-		form(action='/household', method='PUT')
-			input(type='hidden', name='_csrf', value=_csrf)
+		form(action='/household', method='POST')
+			//- input(type='hidden', name='_csrf', value=_csrf)
 			h3 Join:
 			ul.collection
 				for house in households
 					li.collection-item.avatar
 						span.title= house.name
-						input(name='group1', type='radio',id=house._id)
+						input(name='household', value=house._id, type='radio',id=house._id)
 						label(for=house._id) Red
 
 			h5 Upload 5 or more "selfies":

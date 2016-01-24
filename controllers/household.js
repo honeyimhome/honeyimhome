@@ -22,16 +22,47 @@ exports.getHouseholds = function(req, res) {
 };
 
 /**
+ * GET /household
+ * Return a single specific household
+ */
+
+exports.getHousehold = function(req, res) {};
+
+/**
  * POST /household
  * Create a household
  */
-exports.createHousehold = function(req, res) {
-  console.log("In createHousehold method");
-  console.log(req.body);
-  res.send("hi");
+exports.addToHousehold = function(req, res) {
+  var user = req.user;
+  var householdId = req.body.household;
+  console.log("the household is: ");
+  console.log(householdId);
+  Household.findOne({
+    _id: householdId
+  }, function(err, house) {
+    if (!err) {
+      console.log("found the house");
+      if (house.members.indexOf(user._id) != -1) {
+        res.status(400).send('Member already in household');
+        return;
+      }
+      house.members.push(user._id);
+      console.log("house memberS: ");
+      console.log(house.members);
+      house.save(function(err) {
+        if (err) {
+          console.log("error");
+          return res.status(500).send({
+            message: "couldnt save household"
+          });
+        }
+        res.send("succesfully updated a household");
+      });
+    }
+  });
 };
 
-exports.addToHousehold = function(req, res) {
+exports.createHousehold = function(req, res) {
   console.log("In createHousehold method");
   console.log(req.body.data);
 
@@ -61,13 +92,9 @@ exports.getNewHouse = function(req, res) {
   // if (!req.user) {
   //   return res.redirect('/login');
   // }
-  console.log("TESTING");
   Household.find(function(err, docs) {
-    console.log("TESTING2");
     res.render('householdform', {
       households: docs
     });
-    console.log("testing3");
   });
-  console.log("testing3");
 };

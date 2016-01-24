@@ -141,11 +141,12 @@ app.get('/account/unlink/:provider', passportConf.isAuthenticated, userControlle
 ***/
 // Return list of households
 app.get('/households', householdController.getHouseholds);
-// Single household enpoints
+// Create a new household
+app.post('/household/new', householdController.createHousehold);
+// Set of routes for single household
 app.route('/household')
-  // .get(householdController.getHousehold)
-  .post(householdController.createHousehold)
-  .put(householdController.addToHousehold);
+  .get(householdController.getHousehold)
+  .post(householdController.addToHousehold)
 //.delete(householdController.deleteBooks)
 
 
