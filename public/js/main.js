@@ -23,9 +23,9 @@ $(document).ready(function() {
   createHousehold = function() {
     $.ajax({
       method: "POST",
-      url: "http://localhost:3000/household",
+      url: "http://localhost:3000/household/new",
       data: {
-        name: "household2"
+        name: "another-album_with-key"
       }
     })
       .done(function(msg) {
