@@ -2,6 +2,7 @@ var Household = require('../models/Household');
 var lambdaClient = require('../image_processing/lambdaClient');
 var fs = require('fs');
 var twillio = require('./twilioClient');
+var User = require('../models/User');
 
 exports.picRecognize = function(req, res) {
   // Find a unique file name to store the image temporarily
@@ -14,39 +15,25 @@ exports.picRecognize = function(req, res) {
       if (error)
         throw error;
       if (result.photos[0].tags.length === 0) {
-        res.send('###');
+        res.status(400).send("Error identifying image.");
       } else {
         var person = result.photos[0].tags[0].uids[0];
-        var name = ""
-        if (person.confidence < 0.5) {
+        var name = "";
+        console.log("CONFIDENCE: " + person.confidence);
+        if (person.confidence < 0.7) {
           name="guest";
+          twillio.sendMessages(name, req.body.houseID);
+          res.json({'isGuest': true});
         } else {
-          // TODO: GET NAME FROM ID
-          name = person.prediction;
+          User.findOne({_id:person.prediction}, function(err, usr){
+            name = usr.profile.name;
+            twillio.sendMessages(name, req.body.houseID);
+            usr.isGuest = false;
+            res.json(usr);
+          });
         }
-        twillio.sendMessages(name);
-        res.send(name);
       }
-
       fs.unlink(imagePath);
     });
-  });
-};
-
-// Twilio Credentials
-var accountSid = 'AC3dfa860de242195562bd25fbc3a4bc4f';
-var authToken = 'b075b700d6d7d2c23fe47aafbab0ce2d';
-
-//require the Twilio module and create a REST client
-var client = require('twilio')(accountSid, authToken);
-
-//callback takes in (err, sid)
-var sendMsg = function(to, body, callback) {
-  client.messages.create({
-    to: to,
-    from: "+13523224280",
-    body: body
-  }, function(err, message) {
-    callback(err, message);
   });
 };

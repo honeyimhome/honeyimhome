@@ -1,8 +1,8 @@
-
 // Twilio Credentials
 var accountSid = 'AC3dfa860de242195562bd25fbc3a4bc4f';
 var authToken = 'b075b700d6d7d2c23fe47aafbab0ce2d';
 var User = require('../models/User');
+var Household = require('../models/Household');
 
 //require the Twilio module and create a REST client
 var client = require('twilio')(accountSid, authToken);
@@ -18,21 +18,25 @@ var sendMsg = function(to, body, callback) {
   });
 };
 
-exports.sendMessages = function(message){
-  if(message=='guest'){
+exports.sendMessages = function(userName, houseID){
+  if(userName=='guest'){
     message = 'An unknown entity has arrived at your dwelling!';
   }else{
-    message = message + " has arrived at home!";
+    message = userName + " has arrived at home!";
   }
+  console.log("USERNAME: " + userName);
+  console.log("HouseID: " + houseID);
 
-  User.find({}, function(err, users){
-    if(err) throw err;
-    users.forEach(function(usr){
-      if(usr.profile.receiveSms){
-        sendMsg("+1" + usr.profile.phone, message, function(err){
-          if(err) throw err;
-        });
-      }      
+  Household.findOne({_id: houseID}, function(err, house){
+    var members = house.members;
+    members.forEach(function(usrID){
+      User.findOne({_id: usrID}, function(err, usr){
+        if(usr.profile.receiveSms && usr.profile.name != userName){
+          sendMsg("+1" + usr.phone, message, function(err){
+            if(err) throw err;
+          });
+        }
+      });
     });
-  })
+  });
 }
