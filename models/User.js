@@ -39,6 +39,14 @@ var userSchema = new mongoose.Schema({
     picture: {
       type: String,
       default: ''
+    },
+    greeting: {
+      type: String,
+      default: 'Welcome home!'
+    },
+    receiveSms: {
+      type: Boolean,
+      default: true
     }
   },
 

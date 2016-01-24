@@ -162,11 +162,21 @@ exports.postUpdateProfile = function(req, res, next) {
     if (err) {
       return next(err);
     }
-    user.email = req.body.email || '';
-    user.profile.name = req.body.name || '';
-    user.profile.gender = req.body.gender || '';
-    user.profile.location = req.body.location || '';
-    user.profile.website = req.body.website || '';
+
+    // console.log(req.body.gender);
+    console.log(req.body.name == true);
+
+    user.email = req.body.email ? req.body.email : user.email;
+    user.phone = req.body.phone? req.body.phone : user.phone;
+    user.profile.name = req.body.name ? req.body.name : user.profile.name;
+    user.profile.gender = req.body.gender ? req.body.gender : user.profile.gender;
+    user.profile.website = req.body.website ? req.body.website : user.profile.website;
+    user.profile.greeting = req.body.greeting ? req.body.greeting : user.profile.greeting;
+    if(req.body.receiveSms){
+      user.profile.receiveSms = true;
+    }else{
+      user.profile.receiveSms = false;
+    }
     user.save(function(err) {
       if (err) {
         return next(err);
