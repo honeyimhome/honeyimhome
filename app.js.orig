@@ -19,13 +19,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var expressValidator = require('express-validator');
 var sass = require('node-sass-middleware');
-var fs = require('fs');
 var _ = require('lodash');
-// Photo uploads
-var multer = require('multer');
-var upload = multer({
-  dest: 'controllers/'
-});
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
@@ -143,62 +137,51 @@ app.post('/account/password', passportConf.isAuthenticated, userController.postU
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
 
-
-
-// TODO: DELETE THIS IS FOR DEBUGGING SO WE CAN SEE ALL USERS
-var User = require('./models/User');
-
-app.get('/users', function(req, res){
-  User.find({}, function(err, users){
-    res.json(users);
-  });
-})
-
-
 /***
 * App - Household API POINTS
 ***/
+
+var fs = require('fs');
 // Return list of households
 app.get('/households', householdController.getHouseholds);
+<<<<<<< 83c010865249ec29992a090dcae4fe2b3a655e24
 // Create a new household
-app.post('/household/new', upload.array('selfies', 4), householdController.createHousehold);
+app.post('/household/new', householdController.createHousehold);
 // Set of routes for single household
-app.post('/household', upload.array('selfies', 4), householdController.joinHousehold);
+app.route('/household')
+  .get(householdController.getHousehold)
+  .post(householdController.addToHousehold)
 //.delete(householdController.deleteBooks)
 
-// Send in an image to be recognized.
-app.post('/api/recognizeImage', function(req, res) {
-  // Find a unique file name to store the image temporarily
-  var imageName = new Date().getTime() + ".jpg";
-  var imagePath = "./image_processing/images/" + imageName;
-  // Convert the image from base64
-  fs.writeFile(imagePath, new Buffer(req.body.image, "base64"), function(err) {
-    lambdaClient.recognizeFace(req.body.albumName, req.body.albumKey, imagePath, function(result, error) {
-      console.log(result);
-      if (error)
-        throw error;
-      if (result.photos[0].tags.length === 0) {
-        res.send('###');
-      } else {
-        var person = result.photos[0].tags[0].uids[0];
-        if (person.confidence < 0.5) {
-          res.send("guest");
-        } else {
-          res.send(person.prediction);
-        }
-      }
 
-      fs.unlink(imagePath);
-    });
-  });
-});
 /***
 *OUR APP VIEWS
 ***/
+app.get('/newhousehold', householdController.getNewHouse);
+=======
+// Single household enpoints
+app.post('/household', householdController.createHousehold);
+// Send in an image to be recognized.
+app.post('/api/recognizeImage', function(req, res){
+ // Find a unique file name to store the image temporarily
+ var imageName = new Date().getTime() + ".jpg";
+ var imagePath = "./image_processing/images/" + imageName;
 
-app.get('/household', householdController.chooseHouseholdPage);
-app.get('/household/new', householdController.newHouseholdForm);
-app.get('/household/join', householdController.joinHouseholdForm);
+ // Convert the image from base64
+ fs.writeFile(imagePath, new Buffer(req.body.image, "base64"), function(err) {
+   lambdaClient.recognizeFace(req.body.albumName, req.body.albumKey, imagePath, function(result, error){
+     if(error) throw error;
+     var person = result.photos[0].tags[0].uids[0];
+     if(person.confidence < 0.5){
+       res.send("guest");
+     }else{
+       res.send(person.prediction);
+     }
+     fs.unlink(imagePath);
+   });
+ });
+});
+>>>>>>> Created route for file check and a mock client
 
 /**
  * API examples routes.
