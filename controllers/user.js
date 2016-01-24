@@ -112,7 +112,11 @@ exports.postSignup = function(req, res, next) {
 
   var user = new User({
     email: req.body.email,
-    password: req.body.password
+    password: req.body.password,
+    phone: req.body.phone,
+    profile: {
+      name: req.body.name
+    }
   });
 
   User.findOne({
@@ -124,6 +128,7 @@ exports.postSignup = function(req, res, next) {
       });
       return res.redirect('/signup');
     }
+
     user.save(function(err) {
       if (err) {
         return next(err);
@@ -132,7 +137,7 @@ exports.postSignup = function(req, res, next) {
         if (err) {
           return next(err);
         }
-        res.redirect('/');
+        res.redirect('/household');
       });
     });
   });
