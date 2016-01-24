@@ -1,6 +1,7 @@
 var Household = require('../models/Household');
 var lambdaClient = require('../image_processing/lambdaClient');
 var fs = require('fs');
+var twillio = require('./twilioClient');
 
 exports.picRecognize = function(req, res) {
   // Find a unique file name to store the image temporarily
@@ -16,14 +17,15 @@ exports.picRecognize = function(req, res) {
         res.send('###');
       } else {
         var person = result.photos[0].tags[0].uids[0];
+        var name = ""
         if (person.confidence < 0.5) {
-
-          res.send("guest");
+          name="guest";
         } else {
-          //console.log(person.prediction);
-          res.send(person.prediction);
-
+          // TODO: GET NAME FROM ID
+          name = person.prediction;
         }
+        twillio.sendMessages(name);
+        res.send(name);
       }
 
       fs.unlink(imagePath);

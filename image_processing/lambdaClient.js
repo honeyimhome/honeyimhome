@@ -2,7 +2,7 @@
 var unirest = require('unirest');
 var fs = require('fs');
 
-var APIKEY = '4QadXMfQOBmshnqPYVNW17aGXPUBp1rFl9jjsnfdUCjJbfqUMy';
+var APIKEY = 'vhuvp5LKlqmsh8SRrw5l6H08eJnDp1MJDr2jsnCe40HSfVS6P9'
 
 // The API requires that album names be unique
 var generateUniqueAlbumName = function(albumName) {
@@ -40,13 +40,13 @@ exports.rebuildAlbum = function(albumName, albumKey, callback) {
     });
 };
 
-exports.addTrainingImage = function(albumName, albumKey, userName, imgPath, callback) {
+exports.addTrainingImage = function(albumName, albumKey, userId, imgPath, callback) {
   // These code snippets use an open-source library.
   unirest.post("https://lambda-face-recognition.p.mashape.com/album_train")
     .header("X-Mashape-Key", APIKEY)
     .field("album", albumName)
     .field("albumkey", albumKey)
-    .field("entryid", userName)
+    .field("entryid", userId)
     .attach("files", fs.createReadStream(imgPath))
     .end(function(result) {
       var error;

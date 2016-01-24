@@ -47,6 +47,13 @@ var userSchema = new mongoose.Schema({
     receiveSms: {
       type: Boolean,
       default: true
+    },
+    temperature: {
+      type: Number,
+      default: '72'
+    },
+    song: {
+      type: String
     }
   },
 

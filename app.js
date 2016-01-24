@@ -45,7 +45,6 @@ var apiController = require('./controllers/api');
 var clientController = require('./controllers/client');
 var contactController = require('./controllers/contact');
 var householdController = require('./controllers/household');
-var twillioController = require('./controllers/twillio');
 
 /**
  * API keys and Passport configuration.
@@ -182,7 +181,6 @@ app.post('/api/recognizeImage', clientController.picRecognize);
 app.get('/household', householdController.chooseHouseholdPage);
 app.get('/household/new', householdController.newHouseholdForm);
 app.get('/household/join', householdController.joinHouseholdForm);
-app.all('/twillio/reply', twillioController.makeReply);
 
 /**
  * API examples routes.

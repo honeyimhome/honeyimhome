@@ -172,6 +172,8 @@ exports.postUpdateProfile = function(req, res, next) {
     user.profile.gender = req.body.gender ? req.body.gender : user.profile.gender;
     user.profile.website = req.body.website ? req.body.website : user.profile.website;
     user.profile.greeting = req.body.greeting ? req.body.greeting : user.profile.greeting;
+    user.profile.song = req.body.song ? req.body.song : user.profile.song;
+    user.profile.temperature = req.body.temperature ? req.body.temperature : user.profile.temperature;
     if(req.body.receiveSms){
       user.profile.receiveSms = true;
     }else{
