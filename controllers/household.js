@@ -3,6 +3,7 @@ var Household = require('../models/Household');
 var _ = require('lodash');
 var async = require('async');
 var lambdaClient = require('../image_processing/lambdaClient');
+var fs = require('fs');
 
 /**
  * GET /households
@@ -34,42 +35,61 @@ exports.getHousehold = function(req, res) {};
  * Create a household
  */
 exports.addToHousehold = function(req, res) {
+
   var user = req.user;
   var householdId = req.body.household;
-  console.log("the household is: ");
-  console.log(householdId);
   var files = req.files;
-  console.log("The files: ");
-  console.log(files);
-  files.forEach(function(file) {
-    var path = destination + filename;
-    console.log(path);
 
-  });
-
-  Household.findOne({
-    _id: householdId
-  }, function(err, house) {
-    if (!err) {
-      console.log("found the house");
-      if (house.members.indexOf(user._id) != -1) {
-        res.status(400).send('Member already in household');
-        return;
-      }
-      house.members.push(user._id);
-      console.log("house memberS: ");
-      console.log(house.members);
-      house.save(function(err) {
-        if (err) {
-          console.log("error");
-          return res.status(500).send({
-            message: "couldnt save household"
+  try {
+    Household.findOne({
+      _id: householdId
+    }, function(err, house) {
+      if (!err) {
+        var count = 0;
+        files.forEach(function(file) {
+          var path = file.destination + file.filename;
+          fs.rename(path, path + ".jpg", function(err) {
+            if (err) console.log('ERROR: ' + err);
           });
-        }
-        res.send("succesfully updated a household");
-      });
-    }
-  });
+          path = "./" + path + ".jpg";
+          console.log('THE PATH::' + path);
+
+          // Add training image.
+          lambdaClient.addTrainingImage(house.albumName, house.albumKey, user.profile.name, path, function(result, error) {
+            if (error)
+              throw error;
+            count++;
+            if (count == files.length) {
+              lambdaClient.getAlbumSize(house.albumName, house.albumKey, function(result, error) {
+                if (error)
+                  throw error;
+                if (result > 1) {
+                  lambdaClient.rebuildAlbum(house.albumName, house.albumKey, function(result, error) {
+                    if (error)
+                      throw error;
+                  });
+                }
+                // Updating house with new member.
+                if (house.members.indexOf(user._id) != -1) {
+                  throw new Error("Cant add a member twice");
+                  // TODO: Error catching comment out for now cuz we need to keep adding same person
+                  // return res.status(400).send('Member already in household');
+                }
+                house.members.push(user._id);
+                house.save(function(err) {
+                  if (err)
+                    throw err;
+                  res.send("succesfully updated a household");
+                });
+              });
+            }
+          });
+        });
+      }
+    });
+  } catch(error){
+  res.status(500).send(error);
+  }
 };
 
 exports.createHousehold = function(req, res) {
