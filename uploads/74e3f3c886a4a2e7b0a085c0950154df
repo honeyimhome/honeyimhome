@@ -156,7 +156,7 @@ app.post('/household/new', householdController.createHousehold);
 // Set of routes for single household
 app.route('/household')
   .get(householdController.getHousehold)
-  .post(upload.array('selfies', 4), householdController.joinHousehold);
+  .post(upload.array('selfies', 4), householdController.addToHousehold);
 //.delete(householdController.deleteBooks)
 
 // Send in an image to be recognized.
@@ -184,9 +184,9 @@ app.post('/api/recognizeImage', function(req, res) {
 *OUR APP VIEWS
 ***/
 
-app.get('/household', householdController.chooseHouseholdPage);
+app.get('/household/choose', householdController.chooseHouseholdPage);
 app.get('/household/new', householdController.newHouseholdForm);
-app.get('/household/join', householdController.joinHouseholdForm);
+app.get('/household/join', householdController.addToHouseholdForm);
 
 /**
  * API examples routes.

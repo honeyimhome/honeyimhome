@@ -3,7 +3,6 @@ var Household = require('../models/Household');
 var _ = require('lodash');
 var async = require('async');
 
-
 /**
  * GET /households
  * Return list of households.
@@ -33,14 +32,12 @@ exports.getHousehold = function(req, res) {};
  * POST /household
  * Create a household
  */
-exports.addToHousehold = function(req, res) {
+exports.joinHousehold = function(req, res) {
+  console.log("Posted Add Household");
   var user = req.user;
   var householdId = req.body.household;
   console.log("the household is: ");
   console.log(householdId);
-  var files = req.files;
-  console.log("The files: ");
-  console.log(files);
   Household.findOne({
     _id: householdId
   }, function(err, house) {
@@ -67,7 +64,7 @@ exports.addToHousehold = function(req, res) {
 };
 
 exports.createHousehold = function(req, res) {
-  console.log("In createHousehold method");
+  console.log("Posted Create Household");
   console.log(req.body.data);
 
   // console.log(req.body);
@@ -91,13 +88,23 @@ exports.createHousehold = function(req, res) {
 
 };
 
+/* VIEWS */
 
-exports.getNewHouse = function(req, res) {
-  // if (!req.user) {
-  //   return res.redirect('/login');
-  // }
+exports.chooseHouseholdPage = function(req, res) {
+  res.render('household/chooseHousehold');
+};
+
+exports.newHouseholdForm = function(req, res) {
   Household.find(function(err, docs) {
-    res.render('householdform', {
+    res.render('household/newHouseholdForm', {
+      households: docs
+    });
+  });
+};
+
+exports.joinHouseholdForm = function(req, res) {
+  Household.find(function(err, docs) {
+    res.render('household/joinHouseholdForm', {
       households: docs
     });
   });
