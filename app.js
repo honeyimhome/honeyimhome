@@ -19,6 +19,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var expressValidator = require('express-validator');
 var sass = require('node-sass-middleware');
+var fs = require('fs');
 var _ = require('lodash');
 // Photo uploads
 var multer = require('multer');
@@ -43,6 +44,7 @@ var userController = require('./controllers/user');
 var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
 var householdController = require('./controllers/household');
+var lambdaClient = require('./image_processing/lambdaClient');
 
 
 /**
@@ -144,16 +146,38 @@ app.get('/account/unlink/:provider', passportConf.isAuthenticated, userControlle
 /***
 * App - Household API POINTS
 ***/
+
 // Return list of households
 app.get('/households', householdController.getHouseholds);
+
 // Create a new household
 app.post('/household/new', householdController.createHousehold);
+
 // Set of routes for single household
 app.route('/household')
   .get(householdController.getHousehold)
   .post(upload.array('selfies', 4), householdController.addToHousehold);
 //.delete(householdController.deleteBooks)
 
+// Send in an image to be recognized.
+app.post('/api/recognizeImage', function(req, res){
+ // Find a unique file name to store the image temporarily
+ var imageName = new Date().getTime() + ".jpg";
+ var imagePath = "./image_processing/images/" + imageName;
+ // Convert the image from base64
+ fs.writeFile(imagePath, new Buffer(req.body.image, "base64"), function(err) {
+   lambdaClient.recognizeFace(req.body.albumName, req.body.albumKey, imagePath, function(result, error){
+     if(error) throw error;
+     var person = result.photos[0].tags[0].uids[0];
+     if(person.confidence < 0.5){
+       res.send("guest");
+     }else{
+       res.send(person.prediction);
+     }
+     fs.unlink(imagePath);
+   });
+ });
+});
 
 /***
 *OUR APP VIEWS
