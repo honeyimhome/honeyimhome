@@ -56,7 +56,7 @@ exports.joinHousehold = function(req, res) {
           console.log('THE PATH::' + path);
 
           // Add training image.
-          lambdaClient.addTrainingImage(house.albumName, house.albumKey, user._id, path, function(result, error) {
+          lambdaClient.addTrainingImage(house.albumName, house.albumKey, user._id.toString(), path, function(result, error) {
             if (error)
               throw error;
             count++;
@@ -98,6 +98,7 @@ exports.createHousehold = function(req, res) {
   console.log(req.body);
   var name = req.body.household;
   var user = req.user;
+
   var files = req.files;
   console.log(files);
   var household = new Household({
@@ -131,8 +132,10 @@ exports.createHousehold = function(req, res) {
         path = "./" + path + ".jpg";
         console.log('THE PATH::' + path);
 
+        console.log("THE USER ID");
+        console.log(user._id);
         // Add training image.
-        lambdaClient.addTrainingImage(household.albumName, household.albumKey, user._id, path, function(result, error) {
+        lambdaClient.addTrainingImage(household.albumName, household.albumKey, user._id.toString(), path, function(result, error) {
           if (error) {
             console.log("if its empty possibly no faces detected in the image! means no username");
             throw error;
