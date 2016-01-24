@@ -3,10 +3,12 @@ extends ../layout
 block content
   .page-header
     .row
-      .col.s9
+      .col.s6
         h3 Profile Information
       .col.s3
         a.waves-effect.waves-light.btn-large(href='/household', role='button') Household »
+      .col.s3
+        a.waves-effect.waves-light.btn-large(href='/logout', role='button') Logout »
 
   form.form-horizontal(action='/account/profile', method='POST')
     input(type='hidden', name='_csrf', value=_csrf)

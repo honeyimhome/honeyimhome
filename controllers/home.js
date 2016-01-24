@@ -10,7 +10,6 @@ exports.index = function(req, res) {
   {
     console.log('loggedIn');
     res.redirect('/account')
-    next()
   }
 
   res.render('home', {
