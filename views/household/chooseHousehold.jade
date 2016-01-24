@@ -1,0 +1,13 @@
+extends ../layout
+block content
+	.container
+		h1 Choose a Household
+		.row
+			.col.s6
+				a.waves-effect.waves-light.btn-large(href="/household/new")
+					i.material-icons.left add
+					| Create New Household
+			.col.s6
+				a.waves-effect.waves-light.btn-large(href="/household/join")
+					i.material-icons.right search
+					| Join Existing Household

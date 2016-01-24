@@ -1,14 +1,8 @@
-extends layout
+extends ../layout
 block content
 	h1 Household
 	body
 	row
-		h3 Create:
-		//Enter a household
-		.input-field.col.s6
-			input#first_name2.validate( type='text')
-			label.active(for='first_name2') Household
-
 		form(action='/household', method='POST', enctype="multipart/form-data")
 			//- input(type='hidden', name='_csrf', value=_csrf)
 			h3 Join:

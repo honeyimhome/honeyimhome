@@ -34,8 +34,8 @@ exports.getHousehold = function(req, res) {};
  * POST /household
  * Create a household
  */
-exports.addToHousehold = function(req, res) {
-
+exports.joinHousehold = function(req, res) {
+  console.log("Posted Add Household");
   var user = req.user;
   var householdId = req.body.household;
   var files = req.files;
@@ -93,7 +93,7 @@ exports.addToHousehold = function(req, res) {
 };
 
 exports.createHousehold = function(req, res) {
-  console.log("In createHousehold method");
+  console.log("Posted Create Household");
   console.log(req.body.data);
 
   // console.log(req.body);
@@ -125,12 +125,24 @@ exports.createHousehold = function(req, res) {
   });
 };
 
-exports.getNewHouse = function(req, res) {
-  // if (!req.user) {
-  //   return res.redirect('/login');
-  // }
+/* VIEWS */
+
+exports.chooseHouseholdPage = function(req, res) {
+  console.log('rendering');
+  res.render('household/chooseHousehold');
+};
+
+exports.newHouseholdForm = function(req, res) {
   Household.find(function(err, docs) {
-    res.render('householdform', {
+    res.render('household/newHouseholdForm', {
+      households: docs
+    });
+  });
+};
+
+exports.joinHouseholdForm = function(req, res) {
+  Household.find(function(err, docs) {
+    res.render('household/joinHouseholdForm', {
       households: docs
     });
   });
