@@ -12,10 +12,16 @@ exports.picRecognize = function(req, res) {
   fs.writeFile(imagePath, new Buffer(req.body.image, "base64"), function(err) {
     lambdaClient.recognizeFace(req.body.albumName, req.body.albumKey, imagePath, function(result, error) {
       console.log(result);
-      if (error)
-        throw error;
+      if (error){
+        console.log(error);
+        fs.unlink(imagePath);
+        res.status(400).send("Error identifying image");
+        return;
+      }
       if (result.photos[0].tags.length === 0) {
+        fs.unlink(imagePath);
         res.status(400).send("Error identifying image.");
+        return;
       } else {
         var person = result.photos[0].tags[0].uids[0];
         var name = "";
@@ -34,7 +40,11 @@ exports.picRecognize = function(req, res) {
           });
         }
         setTimeout(function(){
-          fs.unlink(imagePath);
+          try{
+            fs.unlink(imagePath);
+          }catch(e){
+            console.log(e);
+          }
         }, 10000)
       }
       // fs.unlink(imagePath);
