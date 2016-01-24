@@ -96,8 +96,10 @@ exports.joinHousehold = function(req, res) {
               });
             }
             // Delete Temp images
-            console.log("deleting@@@@@@@@@@@@");
-            fs.unlinkSync(path);
+            // setInterval(function() {
+            //   console.log("deleting@@@@@@@@@@@@");
+            //   fs.unlink(path);
+            // }, 2000);
           });
         });
       }
