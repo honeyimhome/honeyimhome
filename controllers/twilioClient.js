@@ -1,7 +1,7 @@
 // Twilio Credentials
 var accountSid = 'AC3dfa860de242195562bd25fbc3a4bc4f';
 var authToken = 'b075b700d6d7d2c23fe47aafbab0ce2d';
-var SERVER_NAME = 'http://6d275c5b.ngrok.com/';
+var SERVER_NAME = 'http://hih.maxfresonke.com/';
 
 var User = require('../models/User');
 var Household = require('../models/Household');

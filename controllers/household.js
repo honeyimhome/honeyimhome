@@ -166,8 +166,6 @@ exports.createHousehold = function(req, res) {
       });
       // Respond with done.
       res.send("succesfully saved a household");
-
-
     });
   });
 };
