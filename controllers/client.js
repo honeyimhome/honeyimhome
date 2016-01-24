@@ -1,5 +1,7 @@
 var Household = require('../models/Household');
 var lambdaClient = require('../image_processing/lambdaClient');
+var fs = require('fs');
+
 exports.picRecognize = function(req, res) {
   // Find a unique file name to store the image temporarily
   var imageName = new Date().getTime() + ".jpg";
@@ -17,6 +19,7 @@ exports.picRecognize = function(req, res) {
         if (person.confidence < 0.5) {
           res.send("guest");
         } else {
+          //console.log(person.prediction);
           res.send(person.prediction);
 
         }
