@@ -40,13 +40,13 @@ exports.rebuildAlbum = function(albumName, albumKey, callback) {
     });
 };
 
-exports.addTrainingImage = function(albumName, albumKey, userId, imgPath, callback) {
+exports.addTrainingImage = function(albumName, albumKey, userID, imgPath, callback) {
   // These code snippets use an open-source library.
   unirest.post("https://lambda-face-recognition.p.mashape.com/album_train")
     .header("X-Mashape-Key", APIKEY)
     .field("album", albumName)
     .field("albumkey", albumKey)
-    .field("entryid", userId)
+    .field("entryid", userID)
     .attach("files", fs.createReadStream(imgPath))
     .end(function(result) {
       var error;
