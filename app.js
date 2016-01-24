@@ -149,36 +149,37 @@ app.get('/account/unlink/:provider', passportConf.isAuthenticated, userControlle
 // Return list of households
 app.get('/households', householdController.getHouseholds);
 // Create a new household
-app.post('/household/new', householdController.createHousehold);
+app.post('/household/new', upload.array('selfies', 4), householdController.createHousehold);
 // Set of routes for single household
 app.post('/household', upload.array('selfies', 4), householdController.joinHousehold);
 //.delete(householdController.deleteBooks)
 
 // Send in an image to be recognized.
-app.post('/api/recognizeImage', function(req, res){
- // Find a unique file name to store the image temporarily
- var imageName = new Date().getTime() + ".jpg";
- var imagePath = "./image_processing/images/" + imageName;
- // Convert the image from base64
- fs.writeFile(imagePath, new Buffer(req.body.image, "base64"), function(err) {
-   lambdaClient.recognizeFace(req.body.albumName, req.body.albumKey, imagePath, function(result, error){
-     console.log(result);
-     if(error) throw error;
-     if(result.photos[0].tags.length == 0){
-       res.send('###');
-     }else{
-       var person = result.photos[0].tags[0].uids[0];
-       if(person.confidence < 0.5){
-         res.send("guest");
-       }else{
-         res.send(person.prediction);
-       }
-     }
+app.post('/api/recognizeImage', function(req, res) {
+  // Find a unique file name to store the image temporarily
+  var imageName = new Date().getTime() + ".jpg";
+  var imagePath = "./image_processing/images/" + imageName;
+  // Convert the image from base64
+  fs.writeFile(imagePath, new Buffer(req.body.image, "base64"), function(err) {
+    lambdaClient.recognizeFace(req.body.albumName, req.body.albumKey, imagePath, function(result, error) {
+      console.log(result);
+      if (error)
+        throw error;
+      if (result.photos[0].tags.length === 0) {
+        res.send('###');
+      } else {
+        var person = result.photos[0].tags[0].uids[0];
+        if (person.confidence < 0.5) {
+          res.send("guest");
+        } else {
+          res.send(person.prediction);
+        }
+      }
 
-     fs.unlink(imagePath);
-   });
- });
-
+      fs.unlink(imagePath);
+    });
+  });
+});
 /***
 *OUR APP VIEWS
 ***/

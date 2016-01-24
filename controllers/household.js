@@ -96,8 +96,8 @@ exports.createHousehold = function(req, res) {
   console.log("Posted Create Household");
   console.log(req.body.data);
 
-  // console.log(req.body);
-  var name = req.body.name;
+  console.log(req.body);
+  var name = req.body.household;
   var user = req.user;
   var household = new Household({
     name: name,
