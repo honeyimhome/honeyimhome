@@ -17,6 +17,7 @@ exports.picRecognize = function(req, res) {
       } else {
         var person = result.photos[0].tags[0].uids[0];
         if (person.confidence < 0.5) {
+
           res.send("guest");
         } else {
           //console.log(person.prediction);

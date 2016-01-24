@@ -45,7 +45,7 @@ var apiController = require('./controllers/api');
 var clientController = require('./controllers/client');
 var contactController = require('./controllers/contact');
 var householdController = require('./controllers/household');
-
+var twillioController = require('./controllers/twillio');
 
 /**
  * API keys and Passport configuration.
@@ -145,11 +145,12 @@ app.get('/account/unlink/:provider', passportConf.isAuthenticated, userControlle
 
 
 
+
 // TODO: DELETE THIS IS FOR DEBUGGING SO WE CAN SEE ALL USERS
 var User = require('./models/User');
 
-app.get('/users', function(req, res){
-  User.find({}, function(err, users){
+app.get('/users', function(req, res) {
+  User.find({}, function(err, users) {
     res.json(users);
   });
 })
@@ -177,6 +178,7 @@ app.post('/api/recognizeImage', clientController.picRecognize);
 app.get('/household', householdController.chooseHouseholdPage);
 app.get('/household/new', householdController.newHouseholdForm);
 app.get('/household/join', householdController.joinHouseholdForm);
+app.all('/twillio/reply', twillioController.makeReply);
 
 /**
  * API examples routes.
