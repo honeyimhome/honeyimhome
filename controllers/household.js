@@ -4,6 +4,7 @@ var _ = require('lodash');
 var async = require('async');
 var lambdaClient = require('../image_processing/lambdaClient');
 var fs = require('fs');
+var passport = require('passport');
 
 /**
  * GET /households
@@ -146,6 +147,9 @@ exports.createHousehold = function(req, res) {
 /* VIEWS */
 
 exports.chooseHouseholdPage = function(req, res) {
+  if (!req.user) {
+    res.redirect('/login');
+  }
   console.log('rendering');
   res.render('household/chooseHousehold');
 };
