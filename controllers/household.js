@@ -80,10 +80,15 @@ exports.joinHousehold = function(req, res) {
                 house.save(function(err) {
                   if (err)
                     throw err;
+                  // Respond with done.
                   res.send("succesfully updated a household");
+
                 });
               });
             }
+            // Delete Temp images
+            console.log("deleting@@@@@@@@@@@@");
+            fs.unlinkSync(path);
           });
         });
       }
@@ -140,9 +145,16 @@ exports.createHousehold = function(req, res) {
             console.log("if its empty possibly no faces detected in the image! means no username");
             throw error;
           }
+          // Delete Temp images
+          console.log("deleting@@@@@@@@@@@@");
+          fs.unlinkSync(path);
+
         });
       });
+      // Respond with done.
       res.send("succesfully saved a household");
+
+
     });
   });
 };
