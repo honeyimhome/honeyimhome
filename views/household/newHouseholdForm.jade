@@ -10,16 +10,31 @@ block content
 			//Enter a household
 			.input-field.col.s6
 				input( type='text', name='household')
-				label.active(for='household') Household
+				label.active(for='household') Household name
+			
+			.row
+				.col.s6
+					a.waves-effect.waves-light.btn-large(href='javascript:void(useUpload())')
+						i.material-icons.left perm_media
+						| Upload Selfies
+				.col.s6
+					a.waves-effect.waves-light.btn-large(href='javascript:void(useCamera())')
+						i.material-icons.right videocam
+						| Take Selfies with Camera
+						
+			.upload-file-input
+				h5 Upload 5 or more "selfies":
+					.form-group(action='#')
+						.file-field.input-field
+							.btn
+								span File
+								input(type='file', multiple='',id="take-picture",  name="selfies", accept="image/*")
+							.file-path-wrapper
+								input.file-path.validate(type='text', placeholder='Upload one or more files')
+			
+			.take-snap-div		
+				include ../partials/webcam.jade
 
-			h5 Upload 5 or more "selfies":
-			.form-group(action='#')
-				.file-field.input-field
-					.btn
-						span File
-						input(type='file', multiple='', name="selfies")
-					.file-path-wrapper
-						input.file-path.validate(type='text', placeholder='Upload one or more files')
 
 			button.btn.waves-effect.waves-light(type='submit', name='action')
 				| Finish

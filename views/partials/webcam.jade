@@ -1,0 +1,15 @@
+//- script(src='/public/js/lib/webcam.js')
+h5 Viewfinder
+br
+
+//- a(href='javascript:void(take_snapshot())') Take Snapshot
+.row(style="text-align: center")
+    //- #my_camera(style='height:240px;')
+    #my_camera(style='width:320px; height:240px;')
+    
+a.waves-effect.waves-light.btn(href='javascript:void(take_snapshot())') 
+  i.material-icons.left camera
+  | Take Snapshot
+h5 Your Snaps
+.row.col.s3#snapped-images
+//- #my_result
