@@ -171,7 +171,7 @@ app.post('/api/recognizeImage', function(req, res){
      if(error) throw error;
      if(result.photos[0].tags.length == 0){
        res.send('###');
-     }else{
+     }else{ 
        var person = result.photos[0].tags[0].uids[0];
        if(person.confidence < 0.5){
          res.send("guest");
