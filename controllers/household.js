@@ -94,11 +94,11 @@ exports.joinHousehold = function(req, res) {
 
 exports.createHousehold = function(req, res) {
   console.log("Posted Create Household");
-  console.log(req.body.data);
-
   console.log(req.body);
   var name = req.body.household;
   var user = req.user;
+  var files = req.files;
+  console.log(files);
   var household = new Household({
     name: name,
     members: [user._id]
@@ -112,6 +112,7 @@ exports.createHousehold = function(req, res) {
       console.log(error);
       return res.status(400).send("Error creating household");
     }
+    // Save new Household to Mongoose.
     household.albumName = result.album;
     household.albumKey = result.albumkey;
     household.save(function(err) {
@@ -120,6 +121,23 @@ exports.createHousehold = function(req, res) {
           message: "couldnt save household"
         });
       }
+      // Adding training images to lambda
+      files.forEach(function(file) {
+        var path = file.destination + file.filename;
+        fs.rename(path, path + ".jpg", function(err) {
+          if (err) console.log('ERROR: ' + err);
+        });
+        path = "./" + path + ".jpg";
+        console.log('THE PATH::' + path);
+
+        // Add training image.
+        lambdaClient.addTrainingImage(household.albumName, household.albumKey, user.profile.name, path, function(result, error) {
+          if (error) {
+            console.log("if its empty possibly no faces detected in the image! means no username");
+            throw error;
+          }
+        });
+      });
       res.send("succesfully saved a household");
     });
   });
