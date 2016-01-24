@@ -45,7 +45,6 @@ var apiController = require('./controllers/api');
 var clientController = require('./controllers/client');
 var contactController = require('./controllers/contact');
 var householdController = require('./controllers/household');
-var smsController = require('./controllers/text');
 
 
 /**
@@ -157,7 +156,7 @@ app.post('/household', upload.array('selfies', 4), householdController.joinHouse
 
 // Send in an image to be recognized.
 
-app.post('/api/recognizeImage', client.picRecognize);
+app.post('/api/recognizeImage', clientController.picRecognize);
 
 /***
 *OUR APP VIEWS

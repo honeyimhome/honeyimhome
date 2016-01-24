@@ -26,3 +26,27 @@ exports.picRecognize = function(req, res) {
     });
   });
 };
+
+// Twilio Credentials
+var accountSid = 'AC5ef872f6da5a21de157d80997a64bd33';
+var authToken = '[AuthToken]';
+
+//require the Twilio module and create a REST client
+var client = require('twilio')(accountSid, authToken);
+
+var sendMsg = function(to, body) {
+  client.messages.create({
+    to: to,
+    from: "+13523224280",
+    body: body,
+    mediaUrl: null,
+  }, function(err, message) {
+    console.log(message.sid);
+  });
+};
+
+
+
+// (function() {
+//   sendMsg("+14075758643", "test msg");
+// })();
