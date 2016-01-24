@@ -28,25 +28,19 @@ exports.picRecognize = function(req, res) {
 };
 
 // Twilio Credentials
-var accountSid = 'AC5ef872f6da5a21de157d80997a64bd33';
-var authToken = '[AuthToken]';
+var accountSid = 'AC3dfa860de242195562bd25fbc3a4bc4f';
+var authToken = 'b075b700d6d7d2c23fe47aafbab0ce2d';
 
 //require the Twilio module and create a REST client
 var client = require('twilio')(accountSid, authToken);
 
-var sendMsg = function(to, body) {
+//callback takes in (err, sid)
+var sendMsg = function(to, body, callback) {
   client.messages.create({
     to: to,
     from: "+13523224280",
-    body: body,
-    mediaUrl: null,
+    body: body
   }, function(err, message) {
-    console.log(message.sid);
+    callback(err, message);
   });
 };
-
-
-
-// (function() {
-//   sendMsg("+14075758643", "test msg");
-// })();
