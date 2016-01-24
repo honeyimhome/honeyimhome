@@ -79,7 +79,7 @@ exports.joinHousehold = function(req, res) {
                 // Updating house with new member.
                 if (house.members.indexOf(user._id) != -1) {
                   console.log("ERROR. Cant add a member twice");
-                  return;
+                  //   return;
                   // TODO: Error catching comment out for now cuz we need to keep adding same person
                   // return res.status(400).send('Member already in household');
                 }
