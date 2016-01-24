@@ -66,7 +66,7 @@ exports.joinHousehold = function(req, res) {
               lambdaClient.getAlbumSize(house.albumName, house.albumKey, function(result, error) {
                 if (error) {
                   console.log("ERROR. Error getting album size " + error);
-                  return;
+                  //   return;
                 }
                 if (result > 1) {
                   lambdaClient.rebuildAlbum(house.albumName, house.albumKey, function(result, error) {
