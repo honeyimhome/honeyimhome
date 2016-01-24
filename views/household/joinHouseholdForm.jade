@@ -5,13 +5,11 @@ block content
 	row
 		form(action='/household', method='POST', enctype="multipart/form-data")
 			//- input(type='hidden', name='_csrf', value=_csrf)
-			h3 Join:
-			ul.collection
-				for house in households
-					li.collection-item.avatar
-						span.title= house.name
-						input(name='household', value=house._id, type='radio',id=house._id)
-						label(for=house._id) Red
+			h3 Select a household to join:
+			for house in households
+				.div
+					input.with-gap(name='household', value=house._id, type='radio',id=house._id)
+					label(for=house._id) #{house.name} br
 
 			h5 Upload 5 or more "selfies":
 			.form-group(action='#')
