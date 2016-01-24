@@ -45,7 +45,6 @@ var apiController = require('./controllers/api');
 var clientController = require('./controllers/client');
 var contactController = require('./controllers/contact');
 var householdController = require('./controllers/household');
-var twillioController = require('./controllers/twillio');
 
 /**
  * API keys and Passport configuration.
@@ -121,6 +120,8 @@ app.use(express.static(path.join(__dirname, 'public'), {
 }));
 
 
+
+
 /**
  * Primary app routes.
  */
@@ -143,8 +144,7 @@ app.post('/account/password', passportConf.isAuthenticated, userController.postU
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
 
-app.all('/healthcheck', function(req, res)
-{
+app.all('/healthcheck', function(req, res) {
   res.end();
 });
 
@@ -166,9 +166,9 @@ app.get('/users', function(req, res) {
 // Return list of households
 app.get('/households', householdController.getHouseholds);
 // Create a new household
-app.post('/household/new', upload.array('selfies', 4), householdController.createHousehold);
+app.post('/household/new', upload.array('selfies', 10), householdController.createHousehold);
 // Set of routes for single household
-app.post('/household', upload.array('selfies', 4), householdController.joinHousehold);
+app.post('/household', upload.array('selfies', 10), householdController.joinHousehold);
 //.delete(householdController.deleteBooks)
 
 // Send in an image to be recognized.
@@ -182,7 +182,6 @@ app.post('/api/recognizeImage', clientController.picRecognize);
 app.get('/household', householdController.chooseHouseholdPage);
 app.get('/household/new', householdController.newHouseholdForm);
 app.get('/household/join', householdController.joinHouseholdForm);
-app.all('/twillio/reply', twillioController.makeReply);
 
 /**
  * API examples routes.
