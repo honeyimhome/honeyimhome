@@ -154,9 +154,7 @@ app.get('/households', householdController.getHouseholds);
 app.post('/household/new', householdController.createHousehold);
 
 // Set of routes for single household
-app.route('/household')
-  .get(householdController.getHousehold)
-  .post(upload.array('selfies', 4), householdController.joinHousehold);
+app.post('/household', upload.array('selfies', 4), householdController.joinHousehold);
 //.delete(householdController.deleteBooks)
 
 // Send in an image to be recognized.

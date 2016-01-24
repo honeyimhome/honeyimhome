@@ -109,6 +109,7 @@ exports.createHousehold = function(req, res) {
 /* VIEWS */
 
 exports.chooseHouseholdPage = function(req, res) {
+  console.log('rendering');
   res.render('household/chooseHousehold');
 };
 
