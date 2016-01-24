@@ -57,29 +57,38 @@ exports.joinHousehold = function(req, res) {
 
           // Add training image.
           lambdaClient.addTrainingImage(house.albumName, house.albumKey, user._id.toString(), path, function(result, error) {
-            if (error)
-              throw error;
+            if (error) {
+              console.log("ERROR. ERROR Adding Training Image. " + error);
+              return;
+            }
             count++;
             if (count == files.length) {
               lambdaClient.getAlbumSize(house.albumName, house.albumKey, function(result, error) {
-                if (error)
-                  throw error;
+                if (error) {
+                  console.log("ERROR. Error getting album size " + error);
+                  return;
+                }
                 if (result > 1) {
                   lambdaClient.rebuildAlbum(house.albumName, house.albumKey, function(result, error) {
-                    if (error)
-                      throw error;
+                    if (error) {
+                      console.log("ERROR. Rebuilding Album " + error);
+                      return;
+                    }
                   });
                 }
                 // Updating house with new member.
                 if (house.members.indexOf(user._id) != -1) {
-                  throw new Error("Cant add a member twice");
+                  console.log("ERROR. Cant add a member twice");
+                  return;
                   // TODO: Error catching comment out for now cuz we need to keep adding same person
                   // return res.status(400).send('Member already in household');
                 }
                 house.members.push(user._id);
                 house.save(function(err) {
-                  if (err)
-                    throw err;
+                  if (err) {
+                    console.log("ERROR. Error saving house: " + err);
+                    return;
+                  }
                   // Respond with done.
                   res.send("succesfully updated a household");
 
@@ -143,7 +152,9 @@ exports.createHousehold = function(req, res) {
         lambdaClient.addTrainingImage(household.albumName, household.albumKey, user._id.toString(), path, function(result, error) {
           if (error) {
             console.log("if its empty possibly no faces detected in the image! means no username");
-            throw error;
+            console.log("ERROR. Error adding training image");
+            console.log(error);
+            return;
           }
           // Delete Temp images
           console.log("deleting@@@@@@@@@@@@");
