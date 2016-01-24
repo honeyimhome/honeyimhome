@@ -24,7 +24,7 @@ var _ = require('lodash');
 // Photo uploads
 var multer = require('multer');
 var upload = multer({
-  dest: 'uploads/'
+  dest: 'controllers/'
 });
 
 /**
@@ -148,18 +148,16 @@ app.get('/account/unlink/:provider', passportConf.isAuthenticated, userControlle
 /***
 * App - Household API POINTS
 ***/
-
 // Return list of households
 app.get('/households', householdController.getHouseholds);
-
 // Create a new household
-app.post('/household/new', householdController.createHousehold);
-
+app.post('/household/new', upload.array('selfies', 4), householdController.createHousehold);
 // Set of routes for single household
 app.post('/household', upload.array('selfies', 4), householdController.joinHousehold);
 //.delete(householdController.deleteBooks)
 
 // Send in an image to be recognized.
+
 app.post('/api/recognizeImage', client.picRecognize);
 
 /***
