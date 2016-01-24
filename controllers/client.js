@@ -7,7 +7,7 @@ var User = require('../models/User');
 exports.picRecognize = function(req, res) {
   // Find a unique file name to store the image temporarily
   var imageName = new Date().getTime() + ".jpg";
-  var imagePath = "./image_processing/images/" + imageName;
+  var imagePath = "./public/" + imageName;
   // Convert the image from base64
   fs.writeFile(imagePath, new Buffer(req.body.image, "base64"), function(err) {
     lambdaClient.recognizeFace(req.body.albumName, req.body.albumKey, imagePath, function(result, error) {
@@ -22,18 +22,22 @@ exports.picRecognize = function(req, res) {
         console.log("CONFIDENCE: " + person.confidence);
         if (person.confidence < 0.7) {
           name="guest";
-          twillio.sendMessages(name, req.body.houseID);
+          console.log("NAME IN CLIENT: " + imageName)
+          twillio.sendMessages(name, req.body.houseID, imageName);
           res.json({'isGuest': true});
         } else {
           User.findOne({_id:person.prediction}, function(err, usr){
             name = usr.profile.name;
-            twillio.sendMessages(name, req.body.houseID);
-            usr.isGuest = false;
-            res.json(usr);
+            twillio.sendMessages(name, req.body.houseID, imageName);
+            var obj = {isGuest: false, user: usr};
+            res.json(obj);
           });
         }
+        setTimeout(function(){
+          fs.unlink(imagePath);
+        }, 10000)
       }
-      fs.unlink(imagePath);
+      // fs.unlink(imagePath);
     });
   });
 };
