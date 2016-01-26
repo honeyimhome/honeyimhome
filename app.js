@@ -81,7 +81,9 @@ app.use(sass({
 }));
 app.use(logger('dev'));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
-app.use(bodyParser.json());
+app.use(bodyParser.json({
+  limit: '50mb'
+}));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
@@ -157,7 +159,7 @@ app.get('/users', function(req, res) {
   User.find({}, function(err, users) {
     res.json(users);
   });
-})
+});
 
 
 /***
