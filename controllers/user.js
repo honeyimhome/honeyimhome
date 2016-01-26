@@ -149,7 +149,15 @@ exports.postSignup = function(req, res, next) {
  */
 exports.getAccount = function(req, res) {
   res.render('account/profile', {
-    title: 'Account Management'
+    title: 'Account Management',
+    helpers: {
+      isMale: function(gender, opts) {
+        if (gender == "male") {
+          return opts.fn(this);
+        }
+        else return opts.inverse(this);
+      }
+    }
   });
 };
 
