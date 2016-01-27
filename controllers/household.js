@@ -52,8 +52,6 @@ var getPopulatedHousehold = function(id, callback) {
 exports.manageHousehold = function(req, res) {
   var householdId = req.params.id;
   getPopulatedHousehold(householdId, function(err, house) {
-    console.log("@@@@@@THE HOUSE IN THE VIEW RENDERER");
-    console.log(house);
     res.render('household/manage', {
       house: house
     });
