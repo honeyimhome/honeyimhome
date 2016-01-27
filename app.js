@@ -188,6 +188,7 @@ app.post('/api/recognizeImage', clientController.picRecognize);
 app.get('/household', householdController.chooseHouseholdPage);
 app.get('/household/new', householdController.newHouseholdForm);
 app.get('/household/join', householdController.joinHouseholdForm);
+app.get('/household/manage/:id', householdController.manageHousehold)
 
 /**
  * API examples routes.

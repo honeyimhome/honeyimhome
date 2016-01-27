@@ -1,0 +1,25 @@
+<h1>Households</h1>
+<body></body>
+<row>
+  <form action="/household" method="POST" enctype="multipart/form-data">
+    <h3>Select a household to join:</h3>
+    {{#each households}}
+    <div>
+      <input class="with-gap" name="household" value={{this._id}} type="radio" id="{{this._id}}">
+      <label for="{{this._id}}">{{this.name}}</label>
+    </div>
+    {{/each}}
+    <h5>Upload 5 or more "selfies":</h5>
+    <div action="#" class="form-group">
+      <div class="file-field input-field">
+        <div class="btn"><span>File</span>
+          <input type="file" multiple="" name="selfies"/>
+        </div>
+        <div class="file-path-wrapper">
+          <input type="text" placeholder="Upload one or more files" class="file-path validate"/>
+        </div>
+      </div>
+    </div>
+    <button type="submit" name="action" class="btn waves-effect waves-light">Finish<i class="material-icons right">send</i></button>
+  </form>
+</row>

@@ -1,5 +1,6 @@
 
 var Household = require('../models/Household');
+var User = require('../models/User');
 var _ = require('lodash');
 var async = require('async');
 var lambdaClient = require('../image_processing/lambdaClient');
@@ -25,11 +26,40 @@ exports.getHouseholds = function(req, res) {
 };
 
 /**
- * GET /household
- * Return a single specific household
+ *
+ * Return a single specific household object with populated user objects
  */
 
-exports.getHousehold = function(req, res) {};
+var getPopulatedHousehold = function(id, callback) {
+  Household
+    .findOne({
+      _id: id
+    })
+    .populate('members')
+    .exec(function(err, house){
+      if(!err) {
+        // console.log(house);
+        return callback(null, house);
+      }else return(err);
+
+    });
+};
+
+/**
+ * GET /household/manage{id}
+ * Return a single specific household
+ */
+exports.manageHousehold = function(req, res) {
+  var householdId = req.params.id;
+  getPopulatedHousehold(householdId, function(err, house) {
+    console.log("@@@@@@THE HOUSE IN THE VIEW RENDERER");
+    console.log(house);
+    res.render('household/manage', {
+      house: house
+    });
+  });
+
+}
 
 /**
  * POST /household
@@ -89,8 +119,18 @@ exports.joinHousehold = function(req, res) {
                     console.log("ERROR. Error saving house: " + err);
                     return;
                   }
-                  // Respond with done.
-                  res.send("succesfully updated a household");
+                  user.household = house._id;
+                  user.save(function(err) {
+                    if (err) {
+                      return next(err);
+                    }
+                    req.flash('success', {
+                      msg: 'Profile information updated.'
+                    });
+                    // Respond with done.
+                    res.send("succesfully updated a household");
+                  });
+
 
                 });
               });
@@ -164,8 +204,17 @@ exports.createHousehold = function(req, res) {
 
         });
       });
-      // Respond with done.
-      res.send("succesfully saved a household");
+      user.household = household._id;
+      user.save(function(err) {
+        if (err) {
+          return next(err);
+        }
+        req.flash('success', {
+          msg: 'Profile information updated.'
+        });
+        // Respond with done.
+        res.send("succesfully created a household");
+      });
 
 
     });

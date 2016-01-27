@@ -1,0 +1,111 @@
+<div class="page-header">
+  <div class="row">
+    <div class="col s6">
+      <h3>Profile Information & Settings</h3>
+    </div>
+  </div>
+</div>
+<form action="/account/profile" method="POST" class="form-horizontal">
+  <input type="hidden" name="_csrf"/>
+  <div class="row">
+    <div class="input-field"><i class="material-icons prefix">account_circle</i>
+      <input type="text" name="name" id="name" class="validate" value="{{user.profile.name}}"/>
+      <label for="firstName" class="control-label">First name  </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field"><i class="material-icons prefix">email</i>
+      <input type="text" name="email" id="email" class="validate" value="{{user.email}}"/>
+      <label for="email" class="control-label">Email</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field"><i class="material-icons prefix">phone</i>
+      <input type="tel" name="phone" id="phone" class="validate" value="{{user.phone}}"/>
+      <label for="phone" class="control-label">Phone number</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="input-field"><i class="material-icons prefix">accessibility</i>
+      <label for="gender" class="control-label">Gender
+        <div class="row">
+          <p>
+            <!--Pre-check male radio if male, else precheck female -->
+            {{#isMale user.profile.gender}}
+            <input id="test1" type="radio" name="gender" value="male" data-toggle="radio" checked>
+            <label for="test1">Male</label>
+            <input id="test2" type="radio" name="gender" value="female" data-toggle="radio" >
+            <label for="test2">Female</label>
+            {{else}}
+            <input id="test1" type="radio" name="gender" value="male" data-toggle="radio">
+            <label for="test1">Male</label>
+            <input id="test2" type="radio" name="gender" value="female" data-toggle="radio" checked>
+            <label for="test2">Female</label>
+            {{/isMale}}
+          </p>
+        </div>
+      </label>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <div class="row">
+  <div class="input-field"><i class="material-icons prefix">language</i>
+    <input type="text" name="website" id="webiste" class="validate"value="{{user.profile.website}}"/>
+    <label for="website" class="control-label">Website</label>
+  </div>
+  </div>
+  <div class="row">
+    <div class="input-field"><i class="material-icons prefix">record_voice_over</i>
+      <input type="text" name="greeting" id="greeting" class="validate" value="{{user.profile.greeting}}"/>
+      <label for="greeting" class="control-label">Greeting</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field"><i class="material-icons prefix">album</i>
+      <input type="text" name="song" id="song" class="validate" value="{{user.profile.song}}"/>
+      <label for="song" class="control-label">Song name</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field"><i class="material-icons prefix">ac_unit</i>
+      <input type="text" name="temperature" id="temperature" class="validate" value="{{user.profile.temperature}}"/>
+      <label for="temperature" class="control-label">Temperature</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field"><i class="material-icons prefix">stop</i>
+      <input type="text" name="houseid" id="houseid" class="validate" value="{{user.household}}"/>
+      <label for="houseid" class="control-label">Hacky ass way to add a household id to your user Schema. DONT USE</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="switch"><i class="material-icons prefix">chat</i>
+      <label for="receiveSms" style="margin-left: 15px" class="control-label">Receive SMS
+        <div class="row">
+          <p style="margin-left:5em">
+            {{#if user.profile.receiveSms}}
+            off
+            <input id="receiveSms" type="checkbox" name="receiveSms" checked>
+            <span class="lever"></span>
+            on
+            {{else}}
+            off
+            <input id="receiveSms" type="checkbox" name="receiveSms">
+            <span class="lever"></span>
+            on
+            {{/if}}
+
+          </p>
+        </div>
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-3 col-sm-4">
+      <button type="submit" class="btn btn btn-primary"><i class="fa fa-pencilr"></i>Update Profile</button>
+    </div>
+  </div>
+</form>
