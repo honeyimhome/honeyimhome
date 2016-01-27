@@ -9,7 +9,7 @@ exports.index = function(req, res) {
   if(req.isAuthenticated())
   {
     console.log('loggedIn');
-    res.redirect('/account')
+    return res.redirect('/account')
   }
 
   res.render('home', {

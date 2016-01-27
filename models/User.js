@@ -1,12 +1,17 @@
 var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var mongoose = require('mongoose');
+var User = require('./Household');
 
 var userSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
     lowercase: true
+  },
+  household: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Household'
   },
   password: String,
   phone: String,

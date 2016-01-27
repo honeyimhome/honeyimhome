@@ -70,15 +70,21 @@ mongoose.connection.on('error', function() {
  */
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// swap 2 handlebars
+var exphbs = require('express-handlebars');
+app.engine('.hbs', exphbs({defaultLayout: 'main', extname: '.hbs'}));
+app.set('view engine', '.hbs');
+
 app.use(compress());
-app.use(sass({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public'),
-  debug: true,
-  sourceMap: true,
-  outputStyle: 'expanded'
-}));
+// Remove sass
+// app.use(sass({
+//   src: path.join(__dirname, 'public'),
+//   dest: path.join(__dirname, 'public'),
+//   debug: true,
+//   sourceMap: true,
+//   outputStyle: 'expanded'
+// }));
+
 app.use(logger('dev'));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
 app.use(bodyParser.json({
@@ -184,6 +190,7 @@ app.post('/api/recognizeImage', clientController.picRecognize);
 app.get('/household', householdController.chooseHouseholdPage);
 app.get('/household/new', householdController.newHouseholdForm);
 app.get('/household/join', householdController.joinHouseholdForm);
+app.get('/household/manage/:id', householdController.manageHousehold)
 
 /**
  * API examples routes.

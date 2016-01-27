@@ -149,7 +149,15 @@ exports.postSignup = function(req, res, next) {
  */
 exports.getAccount = function(req, res) {
   res.render('account/profile', {
-    title: 'Account Management'
+    title: 'Account Management',
+    helpers: {
+      isMale: function(gender, opts) {
+        if (gender == "male") {
+          return opts.fn(this);
+        }
+        else return opts.inverse(this);
+      }
+    }
   });
 };
 
@@ -163,7 +171,9 @@ exports.postUpdateProfile = function(req, res, next) {
       return next(err);
     }
 
-
+    // TODO: DELETE HACKY ASS SET HOUSEHOLD ON USER OBJECT.
+    user.household = req.body.houseid ? req.body.houseid : user.household;
+    //END HACKY
     user.email = req.body.email ? req.body.email : user.email;
     user.phone = req.body.phone ? req.body.phone : user.phone;
     user.profile.name = req.body.name ? req.body.name : user.profile.name;

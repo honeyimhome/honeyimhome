@@ -1,0 +1,24 @@
+<h1>Household</h1>
+<body></body>
+<row>
+  <h3>Create:</h3>
+  <form action="/household/new" method="POST" enctype="multipart/form-data">
+    <!--Enter a household-->
+    <div class="input-field col s6">
+      <input type="text" name="household"/>
+      <label for="household" class="active">Household</label>
+    </div>
+    <h5>Upload 5 or more "selfies":</h5>
+    <div action="#" class="form-group">
+      <div class="file-field input-field">
+        <div class="btn"><span>File</span>
+          <input type="file" multiple="" name="selfies"/>
+        </div>
+        <div class="file-path-wrapper">
+          <input type="text" placeholder="Upload one or more files" class="file-path validate"/>
+        </div>
+      </div>
+    </div>
+    <button type="submit" name="action" class="btn waves-effect waves-light">Finish<i class="material-icons right">send</i></button>
+  </form>
+</row>
