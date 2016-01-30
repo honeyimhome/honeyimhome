@@ -1,7 +1,10 @@
 var Household = require('../models/Household');
 var lambdaClient = require('../image_processing/lambdaClient');
 var fs = require('fs');
-var twillio = require('./twilioClient');
+var twillio = require('./helpers/twilioClient');
+var email = require('./helpers/emailClient');
+var sms = require('./helpers/smsClient');
+
 var User = require('../models/User');
 
 exports.picRecognize = function(req, res) {
@@ -12,7 +15,7 @@ exports.picRecognize = function(req, res) {
   fs.writeFile(imagePath, new Buffer(req.body.image, "base64"), function(err) {
     lambdaClient.recognizeFace(req.body.albumName, req.body.albumKey, imagePath, function(result, error) {
       console.log(result);
-      if (error){
+      if (error) {
         console.log(error);
         fs.unlink(imagePath);
         res.status(400).send("Error identifying image");
@@ -27,23 +30,30 @@ exports.picRecognize = function(req, res) {
         var name = "";
         console.log("CONFIDENCE: " + person.confidence);
         if (person.confidence < 0.7) {
-          name="guest";
+          name = "guest";
           console.log("NAME IN CLIENT: " + imageName)
-          twillio.sendMessages(name, req.body.houseID, imageName);
-          res.json({'isGuest': true});
+          sms.sendMessages(name, req.body.houseID, imageName);
+          res.json({
+            'isGuest': true
+          });
         } else {
-          User.findOne({_id:person.prediction}, function(err, usr){
+          User.findOne({
+            _id: person.prediction
+          }, function(err, usr) {
             name = usr.profile.name;
-            twillio.sendMessages(name, req.body.houseID, imageName);
-            var obj = {isGuest: false, user: usr};
+            sms.sendMessages(name, req.body.houseID, imageName);
+            var obj = {
+              isGuest: false,
+              user: usr
+            };
             res.json(obj);
           });
         }
-        setTimeout(function(){
-          try{
+        setTimeout(function() {
+          try {
             fs.unlink(imagePath);
-          }catch(e){
-            console.log(e);
+          } catch(e){
+          console.log(e);
           }
         }, 10000)
       }

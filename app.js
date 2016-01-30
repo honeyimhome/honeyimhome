@@ -48,7 +48,7 @@ var apiController = require('./controllers/api');
 var clientController = require('./controllers/client');
 var contactController = require('./controllers/contact');
 var householdController = require('./controllers/household');
-
+var emailController = require('./controllers/emailClient');
 /**
  * API keys and Passport configuration.
  */
@@ -75,7 +75,10 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 // swap 2 handlebars
 var exphbs = require('express-handlebars');
-app.engine('.hbs', exphbs({defaultLayout: 'main', extname: '.hbs'}));
+app.engine('.hbs', exphbs({
+  defaultLayout: 'main',
+  extname: '.hbs'
+}));
 app.set('view engine', '.hbs');
 
 app.use(compress());
@@ -191,20 +194,18 @@ app.post('/api/recognizeImage', clientController.picRecognize);
 ***/
 
 app.get('/household', householdController.chooseHouseholdPage);
-app.get('/household/new',function(req, res, next)
-{
-    req.params.maxImages = maxImgs;
-    next();
+app.get('/household/new', function(req, res, next) {
+  req.params.maxImages = maxImgs;
+  next();
 }, householdController.newHouseholdForm);
 
 
-app.get('/household/join', function(req, res, next)
-{
+app.get('/household/join', function(req, res, next) {
   req.params.maxImages = maxImgs;
   next();
-},householdController.joinHouseholdForm);
+}, householdController.joinHouseholdForm);
 
-app.get('/household/manage/:id', householdController.manageHousehold)
+app.get('/household/manage/:id', householdController.manageHousehold);
 
 /**
  * API examples routes.
