@@ -7,6 +7,10 @@ var lambdaClient = require('../image_processing/lambdaClient');
 var fs = require('fs');
 var passport = require('passport');
 
+// module.exports = function(maxImgs){
+//   maxImages = maxImgs;
+// }
+
 /**
  * GET /households
  * Return list of households.
@@ -230,8 +234,11 @@ exports.chooseHouseholdPage = function(req, res) {
 
 exports.newHouseholdForm = function(req, res) {
   Household.find(function(err, docs) {
+
+    console.log(req.params.maxImages);
     res.render('household/newHouseholdForm', {
-      households: docs
+      households: docs,
+      maxAmount: req.params.maxImages
     });
   });
 };
@@ -239,7 +246,8 @@ exports.newHouseholdForm = function(req, res) {
 exports.joinHouseholdForm = function(req, res) {
   Household.find(function(err, docs) {
     res.render('household/joinHouseholdForm', {
-      households: docs
+      households: docs,
+      maxAmount: req.params.maxImages
     });
   });
 };

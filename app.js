@@ -27,6 +27,9 @@ var upload = multer({
   dest: 'controllers/'
 });
 
+//maximal image upload
+var maxImgs = 27;
+
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  *
@@ -174,9 +177,9 @@ app.get('/users', function(req, res) {
 // Return list of households
 app.get('/households', householdController.getHouseholds);
 // Create a new household
-app.post('/household/new', upload.array('selfies', 10), householdController.createHousehold);
+app.post('/household/new', upload.array('selfies', maxImgs), householdController.createHousehold);
 // Set of routes for single household
-app.post('/household', upload.array('selfies', 10), householdController.joinHousehold);
+app.post('/household', upload.array('selfies', maxImgs), householdController.joinHousehold);
 //.delete(householdController.deleteBooks)
 
 // Send in an image to be recognized.
@@ -188,8 +191,19 @@ app.post('/api/recognizeImage', clientController.picRecognize);
 ***/
 
 app.get('/household', householdController.chooseHouseholdPage);
-app.get('/household/new', householdController.newHouseholdForm);
-app.get('/household/join', householdController.joinHouseholdForm);
+app.get('/household/new',function(req, res, next)
+{
+    req.params.maxImages = maxImgs;
+    next();
+}, householdController.newHouseholdForm);
+
+
+app.get('/household/join', function(req, res, next)
+{
+  req.params.maxImages = maxImgs;
+  next();
+},householdController.joinHouseholdForm);
+
 app.get('/household/manage/:id', householdController.manageHousehold)
 
 /**
